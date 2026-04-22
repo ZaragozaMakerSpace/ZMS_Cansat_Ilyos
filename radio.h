@@ -50,5 +50,4 @@ void sendRadioPacket(){
     Serial.println("END Packet");
   } else
     DUMPSLN( MSG_SEND_FAILED );
-  delay(interval);
 }

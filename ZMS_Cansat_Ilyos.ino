@@ -1,8 +1,9 @@
 #include <Arduino.h>
 
+#include <Ticker.h> //Sistema no bloqueante
+
 #include "config.h"
 #include "datamodel.h"
-#include "solar.h"
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include "Wire.h"
@@ -11,6 +12,9 @@
 #include "radio.h"
 #include "bmp_utils.h"
 #include "imu_utils.h"
+#include "solar.h"
+
+Ticker radioTicker;
 
 void setup() {
   if (PRINTDEBUG)
@@ -30,11 +34,12 @@ void setup() {
   // IMU Initialization
   setupIMU();
   
+  radioTicker.attach_ms(1000,sendRadioPacket );
 }
 
 void loop() {
   readBMP();
   readIMU();
   readINA();
-  sendRadioPacket();
+  
 }
