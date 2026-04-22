@@ -2,15 +2,19 @@
 
 #include "config.h"
 #include "datamodel.h"
-#include "solar.h"
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include "Wire.h"
 #endif
 
+#include "memory.h"
+
 #include "radio.h"
 #include "bmp_utils.h"
 #include "imu_utils.h"
+#include "solar.h"
+
+
 
 void setup() {
   if (PRINTDEBUG)
@@ -18,6 +22,9 @@ void setup() {
   DUMPSLN(MSG_BMP_TITLE);
   delay(100);
   Wire.begin(8,9);
+
+  memoryInit();
+
   delay(100);
   setupRadio();
 
@@ -37,4 +44,5 @@ void loop() {
   readIMU();
   readINA();
   sendRadioPacket();
+  memoryPollSerial();
 }

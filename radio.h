@@ -49,6 +49,9 @@ void sendRadioPacket(){
     DUMPSLN("Telemetry struct too large for RF69");
     return;
   }
+  
+  // Save Data into memory filesystem
+  memoryAppend(data);
 
   if (rf69.send((const uint8_t *)&data, len)) {
     DUMP("Send Packet",(char*)radioBuffer);
