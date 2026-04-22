@@ -1,37 +1,19 @@
 struct SensorData {
   uint16_t idPacket;
-  float accelX, accelY, accelZ;
-  float pressure;
-  float altitude;
-  float voltage;
-  float intensity;
+  uint8_t  cansatId;
+  float temperatureC;
+  float pressureHpa;
+  float altitudeM;
+  float accelXmss;
+  float accelYmss;
+  float accelZmss;
+  float rollDeg;
+  float pitchDeg;
+  float yawDeg;
+  float ch0Voltage;
+  float ch0Amps;
+  float ch1Voltage;
+  float ch1Amps;
+  float ch2Voltage;
+  float ch2Amps;
 } data;
-
-/*
- * 
-void eepromGet() {
-  for (uint8_t i = 0; i < 1024 / sizeof(data); i++) {
-    EEPROM.get(i * sizeof(data), data);
-    DUMP( PACKET_MSG, data.idPacket);
-    DUMP( ACCX_MSG, data.accelX)
-    DUMP( ACCY_MSG, data.accelY)
-    DUMP( ACCZ_MSG, data.accelZ)
-    DUMP( PRESSURE_MSG, data.pressure)
-    DUMP( ALTITUDE_MSG, data.altitude)
-  }
-}
-*/
-
-/*
- * 
-void eepromSave() {
-  EEPROMWrite(eeAddress, data);
-  eeAddress = ((data.idPacket) / 4) * sizeof(data);
-
-  // EEPROM.put(eeAddress, miniPaquete);
-  // eeAddress = ((miniPaquete.idPaquete) / 4) * sizeof(miniPaquete);
-  // DUMPSLN("grabando");
-
-  // DUMPSLN("No se graba");
-}
-*/

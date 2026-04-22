@@ -42,12 +42,17 @@ bool setupRadio() {
 
 
 void sendRadioPacket(){
-  snprintf(radioBuffer, sizeof(radioBuffer), "CNT:%u", counter++);
+  data.cansatId      = CANSAT_ID;
+  data.idPacket++;
+  const uint8_t len = sizeof(SensorData);
+  if (len > RH_RF69_MAX_MESSAGE_LEN) {
+    DUMPSLN("Telemetry struct too large for RF69");
+    return;
+  }
 
-  if (rf69.send((uint8_t*)radioBuffer, sizeof(radioBuffer))) {
-    Serial.print("Send Packet");
-    Serial.println((char*)radioBuffer);
-    Serial.println("END Packet");
+  if (rf69.send((const uint8_t *)&data, len)) {
+    DUMP("Send Packet",(char*)radioBuffer);
+    DUMPSLN("END Packet");
   } else
     DUMPSLN( MSG_SEND_FAILED );
   delay(interval);

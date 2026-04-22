@@ -21,6 +21,9 @@ VectorFloat gravity; // [x, y, z] gravity vector
 float euler[3];    // [psi, theta, phi]    Euler angle container
 float ypr[3];    // [yaw, pitch, roll]
 
+const float ACCEL_LSB_PER_G = 16384.0f;
+const float G0 = 9.80665f;
+
 // ================================================================
 // ===               INTERRUPT DETECTION ROUTINE                ===
 // ================================================================
@@ -88,8 +91,22 @@ void readIMU() {
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    DUMP("ypr\t", ypr[0] * 180 / M_PI);
-    DUMP("\t", ypr[1] * 180 / M_PI);
-    DUMP("\t", ypr[2] * 180 / M_PI);
+    mpu.dmpGetAccel(&aa, fifoBuffer);
+    mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+
+    data.accelXmss = (aaReal.x / ACCEL_LSB_PER_G) * G0;
+    data.accelYmss = (aaReal.y / ACCEL_LSB_PER_G) * G0;
+    data.accelZmss = (aaReal.z / ACCEL_LSB_PER_G) * G0;
+    data.yawDeg   = ypr[0] * 180.0f / (float)M_PI;
+    data.pitchDeg = ypr[1] * 180.0f / (float)M_PI;
+    data.rollDeg  = ypr[2] * 180.0f / (float)M_PI;
+
+    DUMP("ypr\t", data.yawDeg);
+    DUMP("\t", data.pitchDeg);
+    DUMP("\t", data.rollDeg);
+
+    DUMP("\t acc\t", data.accelXmss);
+    DUMP("\t", data.accelYmss);
+    DUMP("\t", data.accelZmss);
   }
 }

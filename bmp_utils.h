@@ -19,12 +19,16 @@ bool setupBMP() {
 }
 
 void readBMP() {
-  DUMP( TEMP_MSG , bmp.readTemperature());
+  data.temperatureC = bmp.readTemperature();
+  data.pressureHpa    = bmp.readPressure() / 100.0f;
+  data.altitudeM      = bmp.readAltitude(1013.25f);
+
+  DUMP( TEMP_MSG , data.temperatureC);
   DUMPSLN( TEMP_UNIT );
 
-  DUMP( PRESSURE_MSG , bmp.readPressure());
+  DUMP( PRESSURE_MSG , data.pressureHpa);
   DUMPSLN( PRESSURE_UNIT );
 
-  DUMP(ALTITUDE_MSG, bmp.readAltitude(1013.25));
+  DUMP(ALTITUDE_MSG, data.altitudeM);
   DUMPSLN( ALTITUDE_UNIT );
 }
